@@ -2,6 +2,7 @@ package org.example;
 
 import java.util.Optional;
 import java.util.function.*;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class SupplierStream<T> implements BasicStream<T>{
     final Supplier<Optional<T>> supplier;
@@ -20,16 +21,9 @@ public class SupplierStream<T> implements BasicStream<T>{
     }
     @Override
     public BasicStream<T> limit(long maxSize) {
-        final long[] remainingSize = {maxSize}; // Create effectively final array to hold remaining size
-        return new SupplierStream<>(() -> {
-            Optional<T> nextElement = supplier.get();
-            if (nextElement.isPresent() && remainingSize[0] > 0) {
-                remainingSize[0]--; // Decrement remaining size
-                return nextElement;
-            } else {
-                return Optional.empty();
-            }
-        });
+        AtomicInteger c = new AtomicInteger(0);
+        return new SupplierStream<T>(() ->
+                supplier.get().filter(x -> c.getAndIncrement() < maxSize));
     }
 
     @Override
@@ -40,25 +34,11 @@ public class SupplierStream<T> implements BasicStream<T>{
     @Override
     public void forEach(Consumer<T> action) {
         supplier.get().ifPresent((x) -> { action.accept(x); forEach(action); });
-
-        // Autre possibilité, moins "fonctionnelle"
-        // Optional<T> o = s.get();
-        // while (o.isPresent()) {
-        //   action.accept(x);
-        //   o = s.get();
-        // }
     }
 
     @Override
     public Optional<T> reduce(BinaryOperator<T> accumulator) {
-        Optional<T> r = supplier.get();
-        if(r.isEmpty()) return r;
-        T acc = r.get();
-        Optional<T> o = supplier.get();
-        while (o.isPresent()) {
-            acc = accumulator.apply(acc, o.get());
-            o=supplier.get();
-        }
-        return Optional.of(acc);
+        return supplier.get().map((x) -> 
+            reduce(accumulator).map((a) -> accumulator.apply(x, a)).orElse(x));
     }
 }
