@@ -5,19 +5,19 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c5140695-482c-4a6b-8e4c-f87cf5e70171" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/4/9/499269051de99dafc66deeb684e77d10be999af8" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/sonarlint/issuestore/4/9/499269051de99dafc66deeb684e77d10be999af8" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/4/d/4dc0cba551c81205e5d5013864e0049fcff401ec" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/sonarlint/issuestore/4/d/4dc0cba551c81205e5d5013864e0049fcff401ec" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Streams.iml" beforeDir="false" afterPath="$PROJECT_DIR$/Streams.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/SupplierStream.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/SupplierStream.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/test/java/SupplierStreamTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/SupplierStreamTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/example/SupplierStream.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/example/SupplierStream.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/test-classes/SupplierStreamTest.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/test-classes/SupplierStreamTest.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
-  </component>
-  <component name="FileTemplateManagerImpl">
-    <option name="RECENT_TEMPLATES">
-      <list>
-        <option value="Class" />
-      </list>
-    </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -32,15 +32,26 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
+    "JUnit.SupplierStreamTest.executor": "Run",
     "JUnit.SupplierStreamTest.testIterate.executor": "Run",
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "dart.analysis.tool.window.visible": "false",
     "git-widget-placeholder": "main",
-    "last_opened_file_path": "/home/dbana/school/TPNOTE/Streams"
+    "last_opened_file_path": "/home/dbana/school/TPNOTE/Streams",
+    "node.js.selected.package.tslint": "(autodetect)"
   }
 }]]></component>
-  <component name="RunManager">
+  <component name="RunManager" selected="JUnit.SupplierStreamTest.testIterate">
+    <configuration name="SupplierStreamTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="Streams" />
+      <option name="PACKAGE_NAME" value="" />
+      <option name="MAIN_CLASS_NAME" value="SupplierStreamTest" />
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="SupplierStreamTest.testIterate" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="Streams" />
       <option name="PACKAGE_NAME" value="" />
@@ -51,22 +62,10 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration default="true" type="JetRunConfigurationType">
-      <module name="Streams" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration default="true" type="KotlinStandaloneScriptRunConfigurationType">
-      <module name="Streams" />
-      <option name="filePath" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
     <recent_temporary>
       <list>
         <item itemvalue="JUnit.SupplierStreamTest.testIterate" />
+        <item itemvalue="JUnit.SupplierStreamTest" />
       </list>
     </recent_temporary>
   </component>

@@ -51,10 +51,11 @@ public class SupplierStream<T> implements BasicStream<T>{
         });
     }
 
-
     public static <T> SupplierStream<T> concat(SupplierStream<T> s1, SupplierStream<T> s2) {
         return new SupplierStream<>(() -> s1.supplier.get().or(s2.supplier));
     }
+
+
 
 
 
