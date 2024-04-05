@@ -103,7 +103,6 @@ public class SupplierStreamTest {
         SupplierStream<Integer> stream = new SupplierStream<>(generator(10));
         BasicStream<Integer> iterated = stream.iterate(1, x -> x * 2).limit(10);
         iterated.forEach(x -> System.out.println(x));
-        System.out.println("xxxxxxxxxxxxxx");
     }
 
 
