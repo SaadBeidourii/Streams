@@ -1,13 +1,11 @@
 
 ¡
-java:S2293"YReplace the type specification in this constructor call with the diamond operator ("<>").(ÅšÂıÿÿÿÿ8ïø¤êê1J$9b8b2a59-e126-48fd-bce2-e48d356c05ad
+java:S2293"YReplace the type specification in this constructor call with the diamond operator ("<>").(ÅšÂıÿÿÿÿ8ïø¤êê1J$0211c4c1-3484-412c-98fb-2e7e436fca8a
 r
-java:S1611"/Remove the parentheses around the "x" parameter(·óÁ†8÷ø¤êê1J$ea9339bb-6975-495c-be3d-5306e492a021
+java:S1611"/Remove the parentheses around the "x" parameter(·óÁ†8÷ø¤êê1J$2dfad134-57d6-4a11-98d9-9675b35998af
 w
-java:S1611%"/Remove the parentheses around the "x" parameter(ĞÔßÖıÿÿÿÿ8úø¤êê1J$450e0e05-9a7b-4efe-a4a7-7b933d2f6240
+java:S1611%"/Remove the parentheses around the "x" parameter(ĞÔßÖıÿÿÿÿ8úø¤êê1J$03801fdb-59b0-4c1a-9f67-ae574e398505
 r
-java:S1611*"/Remove the parentheses around the "x" parameter(¨í–…8úø¤êê1J$e9af95a6-5427-4bea-a464-3fd4959d7a1e
+java:S1611*"/Remove the parentheses around the "x" parameter(¨í–…8úø¤êê1J$08cf5b20-7ea8-4749-8953-c2aeca654afd
 w
-java:S1611+"/Remove the parentheses around the "a" parameter(åÒş˜ûÿÿÿÿ8ûø¤êê1J$7f4274f6-8c8c-46a5-9370-987dbd47a201
-e
-java:S1128"HRemove this unused import 'java.util.concurrent.atomic.AtomicReference'.(×‡µó8°á±êê1
+java:S1611+"/Remove the parentheses around the "a" parameter(åÒş˜ûÿÿÿÿ8ûø¤êê1J$0516bd75-0bbb-4aff-9391-a3ee611e5015

@@ -43,6 +43,14 @@ public class SupplierStream<T> implements BasicStream<T>{
             reduce(accumulator).map((a) -> accumulator.apply(x, a)).orElse(x));
     }
 
+    public static <T> SupplierStream<T> iterate(T seed, UnaryOperator<T> f) {
+        AtomicReference<T> next = new AtomicReference<>(seed);
+        return new SupplierStream<>(() -> {
+            next.set(f.apply(next.get()));
+            return Optional.of(next.get());
+        });
+    }
+
 
     public static <T> SupplierStream<T> concat(SupplierStream<T> s1, SupplierStream<T> s2) {
         return new SupplierStream<>(() -> s1.supplier.get().or(s2.supplier));

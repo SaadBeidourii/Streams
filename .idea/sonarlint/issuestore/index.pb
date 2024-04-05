@@ -11,3 +11,7 @@ U
 :
 
 .gitignore,a/5/a5cc2925ca8258af241be7e5b0381edf30266302
+Z
+*src/main/java/org/example/BasicStream.java,0/c/0cfa933ea24d93b42cdb3a6e5d0bbb435f9265fd
+S
+#src/main/java/org/example/Main.java,0/b/0ba1b9c7a4878802f938e331cc2d8a042087ec6b
