@@ -6,15 +6,16 @@ import java.util.function.*;
 
 public class IndexStream<T> implements BasicStream<T> {
 
-    private final int min;
-    private final int max;
-    private final Function<Integer, Optional<T>> f;
+    protected final int min;
+    protected final int max;
+    protected final Function<Integer, Optional<T>> f;
 
     public IndexStream(Function<Integer,Optional<T>> f,int min, int max) {
         this.f = f;
         this.min = min;
         this.max = max;
     }
+
 
     @Override
     public void forEach(Consumer<T> action) {
@@ -44,4 +45,23 @@ public class IndexStream<T> implements BasicStream<T> {
     public <R> BasicStream<R> map(Function<T, R> mapper) {
         return null;
     }
+
+    public T findAny(Predicate<T> predicate) {
+        AtomicInteger i = new AtomicInteger(min);
+        while (i.get() < max) {
+            Optional<T> o = f.apply(i.get());
+            if (o.isPresent()) {
+                T x = o.get();
+                if (predicate.test(x)) {
+                    return x;
+                }
+            }
+            i.incrementAndGet();
+        }
+        return null;
+    }
+
+
+
+
 }
