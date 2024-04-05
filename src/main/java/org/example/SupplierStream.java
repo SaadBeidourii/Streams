@@ -39,10 +39,14 @@ public class SupplierStream<T> implements BasicStream<T>{
 
     @Override
     public void forEach(Consumer<T> action) {
-        Optional<T> nextElement;
-        while ((nextElement = supplier.get()).isPresent()) {
-            action.accept(nextElement.get());
-        }
+        supplier.get().ifPresent((x) -> { action.accept(x); forEach(action); });
+
+        // Autre possibilité, moins "fonctionnelle"
+        // Optional<T> o = s.get();
+        // while (o.isPresent()) {
+        //   action.accept(x);
+        //   o = s.get();
+        // }
     }
 
     @Override
