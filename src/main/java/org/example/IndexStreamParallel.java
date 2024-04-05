@@ -2,6 +2,7 @@ package org.example;
 
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.BinaryOperator;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -46,14 +47,17 @@ public class IndexStreamParallel<T> extends IndexStream<T> {
     }
 
     public T findAny(Predicate<T> predicate) {
-        return IntStream.range(min, max).parallel()
+        AtomicReference<T> result = new AtomicReference<>();
+        IntStream.range(min, max).parallel()
                 .mapToObj(i -> f.apply(i))
-                .filter(Optional::isPresent)
-                .map(Optional::get)
-                .filter(predicate)
-                .findAny()
-                .orElse(null);
+                .forEach(optional -> optional.ifPresent(value -> {
+                    if (predicate.test(value) && result.get() == null) {
+                        result.set(value);
+                    }
+                }));
+        return result.get();
     }
+
 
 
 }

@@ -1,11 +1,19 @@
 
-¡
-java:S2293"YReplace the type specification in this constructor call with the diamond operator ("<>").(ÅšÂıÿÿÿÿ8ïø¤êê1J$f413fb5d-6b44-4b1a-ae43-fd71eb0ecca0
-r
-java:S1611"/Remove the parentheses around the "x" parameter(·óÁ†8÷ø¤êê1J$42830b9d-0bc6-42a5-9fcd-c6d1dcbc278e
-w
-java:S1611%"/Remove the parentheses around the "x" parameter(ĞÔßÖıÿÿÿÿ8úø¤êê1J$267b3d8d-19d6-4753-aadc-6dbaddc6c0d1
-r
-java:S1611*"/Remove the parentheses around the "x" parameter(¨í–…8úø¤êê1J$9693971d-3857-4288-aafc-7150b01d9bb8
-w
-java:S1611+"/Remove the parentheses around the "a" parameter(åÒş˜ûÿÿÿÿ8ûø¤êê1J$17ab5bed-0248-4879-97de-5e18ce0c0de6
+{
+java:S2293"YReplace the type specification in this constructor call with the diamond operator ("<>").(ÅšÂıÿÿÿÿ8¼‰ìê1
+L
+java:S1611"/Remove the parentheses around the "x" parameter(·óÁ†8¨¼‰ìê1
+Q
+java:S1611'"/Remove the parentheses around the "x" parameter(ĞÔßÖıÿÿÿÿ8ª¼‰ìê1
+L
+java:S1611,"/Remove the parentheses around the "x" parameter(¨í–…8ª¼‰ìê1
+Q
+java:S1611-"/Remove the parentheses around the "a" parameter(åÒş˜ûÿÿÿÿ8ª¼‰ìê1
+E
+java:S1948A"(Make "stream" transient or serializable.(×õ³¬8³¼‰ìê1
+O
+java:S1948B"-Make "accumulator" transient or serializable.(ÉØÊ”ùÿÿÿÿ8³¼‰ìê1
+E
+java:S1948U"(Make "stream" transient or serializable.(×õ³¬8¶¼‰ìê1
+J
+java:S1948V"(Make "action" transient or serializable.(ê¤’§ûÿÿÿÿ8·¼‰ìê1
