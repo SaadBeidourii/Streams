@@ -7,3 +7,5 @@ Z
 *src/main/java/org/example/BasicStream.java,0/c/0cfa933ea24d93b42cdb3a6e5d0bbb435f9265fd
 ]
 -src/main/java/org/example/SupplierStream.java,4/d/4dc0cba551c81205e5d5013864e0049fcff401ec
+U
+%src/test/java/SupplierStreamTest.java,4/9/499269051de99dafc66deeb684e77d10be999af8

@@ -61,4 +61,6 @@ public class SupplierStream<T> implements BasicStream<T>{
         }
         return Optional.of(acc);
     }
+
+
 }
