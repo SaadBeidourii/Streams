@@ -5,11 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c5140695-482c-4a6b-8e4c-f87cf5e70171" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/4/d/4dc0cba551c81205e5d5013864e0049fcff401ec" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/sonarlint/issuestore/4/d/4dc0cba551c81205e5d5013864e0049fcff401ec" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/index.pb" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/sonarlint/issuestore/index.pb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/securityhotspotstore/index.pb" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/sonarlint/securityhotspotstore/index.pb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/IndexStreamParallel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/IndexStreamParallel.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/IndexStream.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/IndexStream.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/IndexStreamTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/IndexStreamTest.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -34,25 +31,46 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;JUnit.SupplierStreamTest.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.SupplierStreamTest.testFindAny.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.SupplierStreamTest.testIterate.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;dart.analysis.tool.window.visible&quot;: &quot;false&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/home/dbana/school/TPNOTE/Streams&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "JUnit.IndexStreamTest.testLimit.executor": "Run",
+    "JUnit.SupplierStreamTest.executor": "Run",
+    "JUnit.SupplierStreamTest.testFindAny.executor": "Run",
+    "JUnit.SupplierStreamTest.testIterate.executor": "Run",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "dart.analysis.tool.window.visible": "false",
+    "git-widget-placeholder": "main",
+    "last_opened_file_path": "/home/dbana/school/TPNOTE/Streams",
+    "node.js.selected.package.tslint": "(autodetect)"
   }
-}</component>
-  <component name="RunManager" selected="JUnit.SupplierStreamTest.testFindAny">
-    <configuration name="SupplierStreamTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+}]]></component>
+  <component name="RunManager" selected="JUnit.IndexStreamTest">
+    <configuration name="IndexStreamTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="Streams" />
       <option name="PACKAGE_NAME" value="" />
-      <option name="MAIN_CLASS_NAME" value="SupplierStreamTest" />
+      <option name="MAIN_CLASS_NAME" value="IndexStreamTest" />
       <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="IndexStreamTest.testLimit" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="Streams" />
+      <option name="PACKAGE_NAME" value="" />
+      <option name="MAIN_CLASS_NAME" value="IndexStreamTest" />
+      <option name="METHOD_NAME" value="testLimit" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="IndexStreamTest.testMap" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="Streams" />
+      <option name="PACKAGE_NAME" value="" />
+      <option name="MAIN_CLASS_NAME" value="IndexStreamTest" />
+      <option name="METHOD_NAME" value="testMap" />
+      <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -77,11 +95,26 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration default="true" type="JetRunConfigurationType">
+      <module name="Streams" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="KotlinStandaloneScriptRunConfigurationType">
+      <module name="Streams" />
+      <option name="filePath" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="JUnit.IndexStreamTest" />
+        <item itemvalue="JUnit.IndexStreamTest.testMap" />
+        <item itemvalue="JUnit.IndexStreamTest.testLimit" />
         <item itemvalue="JUnit.SupplierStreamTest.testFindAny" />
         <item itemvalue="JUnit.SupplierStreamTest.testIterate" />
-        <item itemvalue="JUnit.SupplierStreamTest" />
       </list>
     </recent_temporary>
   </component>

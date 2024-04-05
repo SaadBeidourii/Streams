@@ -48,17 +48,18 @@ public class IndexStream<T> implements BasicStream<T> {
 
     @Override
     public BasicStream<T> filter(Predicate<T> predicate) {
-        return null;
+        return new IndexStream<>(valueSupplier.andThen(opt -> opt.filter(predicate)), min, max);
     }
 
     @Override
     public BasicStream<T> limit(long maxSize) {
-        return null;
+        int newMax = Math.min((int) (min + maxSize - 1), max);
+        return new IndexStream<>(valueSupplier, min, newMax);
     }
 
     @Override
     public <R> BasicStream<R> map(Function<T, R> mapper) {
-        return null;
+        return new IndexStream<>(index -> valueSupplier.apply(index).map(mapper), min, max);
     }
 
     public T findAny(Predicate<T> predicate) {
