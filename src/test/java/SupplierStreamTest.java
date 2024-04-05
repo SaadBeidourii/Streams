@@ -1,10 +1,12 @@
 import org.example.BasicStream;
+import org.example.IndexStream;
 import org.example.SupplierStream;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 
@@ -109,6 +111,16 @@ public class SupplierStreamTest {
 
 
     }
+
+    @Test
+    public void testFindAny() {
+        final int min = 0;
+        final int max = 10;
+        final Function f = x -> Optional.of(x);
+        IndexStream<Integer> stream = new IndexStream<>(f, min, max);
+        assertEquals(5, stream.findAny(x -> x == 5).intValue());
+    }
+
 
 
 

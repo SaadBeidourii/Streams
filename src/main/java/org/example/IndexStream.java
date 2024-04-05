@@ -59,4 +59,23 @@ public class IndexStream<T> implements BasicStream<T> {
     public <R> BasicStream<R> map(Function<T, R> mapper) {
         return null;
     }
+
+    public T findAny(Predicate<T> predicate) {
+        AtomicInteger i = new AtomicInteger(min);
+        while (i.get() < max) {
+            Optional<T> o = f.apply(i.get());
+            if (o.isPresent()) {
+                T x = o.get();
+                if (predicate.test(x)) {
+                    return x;
+                }
+            }
+            i.incrementAndGet();
+        }
+        return null;
+    }
+
+
+
+
 }
