@@ -41,4 +41,6 @@ public class SupplierStream<T> implements BasicStream<T>{
         return supplier.get().map((x) -> 
             reduce(accumulator).map((a) -> accumulator.apply(x, a)).orElse(x));
     }
+
+
 }
