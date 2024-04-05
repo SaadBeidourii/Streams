@@ -4,6 +4,8 @@ import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.*;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.ForkJoinPool;
+import java.util.concurrent.RecursiveTask;
 
 public class SupplierStream<T> implements BasicStream<T>{
     final Supplier<Optional<T>> supplier;
@@ -13,7 +15,7 @@ public class SupplierStream<T> implements BasicStream<T>{
     }
 
     @Override
-    public BasicStream<T> filter(Predicate<T> predicate) {
+    public SupplierStream<T> filter(Predicate<T> predicate) {
         return new SupplierStream<>(() -> getNext(predicate));
     }
     public Optional<T> getNext(Predicate<T> predicate){
@@ -21,14 +23,14 @@ public class SupplierStream<T> implements BasicStream<T>{
         return o.flatMap((x)->predicate.test(x)?Optional.of(x):getNext(predicate));
     }
     @Override
-    public BasicStream<T> limit(long maxSize) {
+    public SupplierStream<T> limit(long maxSize) {
         AtomicInteger c = new AtomicInteger(0);
         return new SupplierStream<T>(() ->
                 supplier.get().filter(x -> c.getAndIncrement() < maxSize));
     }
 
     @Override
-    public <R> BasicStream<R> map(Function<T, R> mapper) {
+    public <R> SupplierStream<R> map(Function<T, R> mapper) {
         return new SupplierStream<>(() -> supplier.get().map(mapper));
     }
 
@@ -57,6 +59,86 @@ public class SupplierStream<T> implements BasicStream<T>{
 
 
 
+
+
+    private static class ReduceTask<T> extends RecursiveTask<Optional<T>> {
+        private final SupplierStream<T> stream;
+        private final BinaryOperator<T> accumulator;
+
+        public ReduceTask(SupplierStream<T> stream, BinaryOperator<T> accumulator) {
+            this.stream = stream;
+            this.accumulator = accumulator;
+        }
+
+        @Override
+        protected Optional<T> compute() {
+            return stream.supplier.get().flatMap(element -> {
+                ReduceTask<T> nextTask = new ReduceTask<>(stream, accumulator);
+                nextTask.fork();
+                return Optional.of(accumulator.apply(element, nextTask.join().orElse(element)));
+            });
+        }
+
+    }
+
+    private static class ForEachTask<T> extends RecursiveTask<Void> {
+        private final SupplierStream<T> stream;
+        private final Consumer<T> action;
+
+        public ForEachTask(SupplierStream<T> stream, Consumer<T> action) {
+            this.stream = stream;
+            this.action = action;
+        }
+
+        @Override
+        protected Void compute() {
+            stream.supplier.get().ifPresent(element -> {
+                action.accept(element);
+                ForEachTask<T> nextTask = new ForEachTask<>(stream, action);
+                nextTask.fork();
+                nextTask.join();
+            });
+            return null;
+        }
+    }
+
+    public SupplierStream<T> parallel() {
+        return new ParallelSupplierStream<>(this);
+    }
+
+    private static class ParallelSupplierStream<T> extends SupplierStream<T> {
+        private final ForkJoinPool forkJoinPool;
+
+        public ParallelSupplierStream(SupplierStream<T> supplier) {
+            super(supplier.supplier);
+            this.forkJoinPool = new ForkJoinPool();
+        }
+
+        @Override
+        public void forEach(Consumer<T> action) {
+            forkJoinPool.invoke(new ForEachTask<>(this, action));
+        }
+
+        @Override
+        public Optional<T> reduce(BinaryOperator<T> accumulator) {
+            return forkJoinPool.invoke(new ReduceTask<>(this, accumulator));
+        }
+
+        @Override
+        public ParallelSupplierStream<T> filter(Predicate<T> predicate) {
+            return new ParallelSupplierStream<>(super.filter(predicate));
+        }
+
+        @Override
+        public ParallelSupplierStream<T> limit(long maxSize) {
+            return new ParallelSupplierStream<>(super.limit(maxSize));
+        }
+
+        @Override
+        public <R> ParallelSupplierStream<R> map(Function<T, R> mapper) {
+            return new ParallelSupplierStream<>(super.map(mapper));
+        }
+    }
 
 
 }
