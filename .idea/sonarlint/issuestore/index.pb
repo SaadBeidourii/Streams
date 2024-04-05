@@ -21,3 +21,5 @@ b
 pom.xml,4/4/442292b8a7efeabbe4cc176709b833b1792140ec
 Z
 *src/main/java/org/example/IndexStream.java,0/1/01d3673d250595c358a0d348cf78cde6002c8904
+e
+5src/main/java/org/example/ParallelSupplierStream.java,c/0/c0b1bdae67356028c97b141679f5ee553c7bc214
