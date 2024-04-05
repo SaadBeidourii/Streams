@@ -11,16 +11,16 @@ public class ParallelSupplierStream<T> extends SupplierStream<T> {
         super(supplier);
     }
 
+    private void forEachRecur(Consumer<T> action){
+        supplier.get().ifPresent(presentValue -> {
+            action.accept(presentValue);
+            forEachRecur(action);
+        });
+    }
+
     @Override
     public void forEach(Consumer<T> action) {
-        globalPool.submit(() -> {
-            Optional<T> result = supplier.get();
-
-            while (result.isPresent()) {
-                action.accept(result.get());
-                result = supplier.get();
-            }
-        }).join();
+        globalPool.submit(() -> forEachRecur(action)).join();
     }
 
     @Override
