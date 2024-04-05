@@ -101,9 +101,13 @@ public class SupplierStreamTest {
     @Test
     public void testIterate() {
         SupplierStream<Integer> stream = new SupplierStream<>(generator(10));
+        BasicStream<Integer> iteratedEasy = stream.iterate(1, x -> x * 2).limit(4);
+         assertEquals(30, iteratedEasy.reduce(Integer::sum).orElse(-1).intValue());
+
         BasicStream<Integer> iterated = stream.iterate(1, x -> x * 2).limit(10);
-        iterated.forEach(x -> System.out.println(x));
-        System.out.println("xxxxxxxxxxxxxx");
+        assertEquals(2046, iterated.reduce(Integer::sum).orElse(-1).intValue());
+
+
     }
 
 
