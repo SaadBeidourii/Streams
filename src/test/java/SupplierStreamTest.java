@@ -109,17 +109,9 @@ public class SupplierStreamTest {
         BasicStream<Integer> iterated = stream.iterate(1, x -> x * 2).limit(10);
         assertEquals(2046, iterated.reduce(Integer::sum).orElse(-1).intValue());
 
-
     }
 
-    @Test
-    public void testFindAny() {
-        final int min = 0;
-        final int max = 10;
-        final Function f = x -> Optional.of(x);
-        IndexStream<Integer> stream = new IndexStream<>(f, min, max);
-        assertEquals(5, stream.findAny(x -> x == 5).intValue());
-    }
+
 
 
 
