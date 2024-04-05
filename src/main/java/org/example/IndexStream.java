@@ -1,33 +1,48 @@
 package org.example;
 
 import java.util.Optional;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.*;
 
 public class IndexStream<T> implements BasicStream<T> {
 
     private final int min;
     private final int max;
-    private final Function<Integer, Optional<T>> f;
+    private final Function<Integer, Optional<T>> valueSupplier;
 
     public IndexStream(Function<Integer,Optional<T>> f,int min, int max) {
-        this.f = f;
+        this.valueSupplier = f;
         this.min = min;
         this.max = max;
     }
 
     @Override
     public void forEach(Consumer<T> action) {
-        AtomicInteger i = new AtomicInteger(min);
-        while (i.get() < max) {
-            f.apply(i.get()).ifPresent(action);
-            i.incrementAndGet();
+        forEachRecursive(action, min);
+    }
+
+    private void forEachRecursive(Consumer<T> action, int index) {
+        if (index <= max) {
+            Optional<T> element = valueSupplier.apply(index);
+            element.ifPresent(action);
+            forEachRecursive(action, index + 1);
         }
     }
 
     @Override
     public Optional<T> reduce(BinaryOperator<T> accumulator) {
-        return Optional.empty();
+        return reduceRecursive(accumulator, min);
+    }
+
+    private Optional<T> reduceRecursive(BinaryOperator<T> accumulator, int index) {
+        if (index > max) {
+            return Optional.empty(); // Terminate recursion when index exceeds max
+        }
+        Optional<T> currentValue = valueSupplier.apply(index);
+        return currentValue.map(value ->
+                reduceRecursive(accumulator, index + 1).map(nextValue ->
+                        accumulator.apply(value, nextValue)
+                ).orElse(value)
+        );
     }
 
     @Override

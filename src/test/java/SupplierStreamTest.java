@@ -42,7 +42,7 @@ public class SupplierStreamTest {
     public void testReduce() {
         SupplierStream<Integer> stream = new SupplierStream<>(generator(6));
         assertEquals(15, stream.reduce(Integer::sum).orElse(-1).intValue());
-
+        assertEquals(15, stream.reduce(Integer::sum).orElse(-1).intValue());
         stream = new SupplierStream<>(Optional::empty);
         assertFalse(stream.reduce(Integer::sum).isPresent());
     }
