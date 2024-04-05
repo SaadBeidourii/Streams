@@ -103,42 +103,7 @@ public class SupplierStream<T> implements BasicStream<T>{
     }
 
     public SupplierStream<T> parallel() {
-        return new ParallelSupplierStream<>(this);
+        return new ParallelSupplierStream<>(supplier);
     }
-
-    private static class ParallelSupplierStream<T> extends SupplierStream<T> {
-        private final ForkJoinPool forkJoinPool;
-
-        public ParallelSupplierStream(SupplierStream<T> supplier) {
-            super(supplier.supplier);
-            this.forkJoinPool = new ForkJoinPool();
-        }
-
-        @Override
-        public void forEach(Consumer<T> action) {
-            forkJoinPool.invoke(new ForEachTask<>(this, action));
-        }
-
-        @Override
-        public Optional<T> reduce(BinaryOperator<T> accumulator) {
-            return forkJoinPool.invoke(new ReduceTask<>(this, accumulator));
-        }
-
-        @Override
-        public ParallelSupplierStream<T> filter(Predicate<T> predicate) {
-            return new ParallelSupplierStream<>(super.filter(predicate));
-        }
-
-        @Override
-        public ParallelSupplierStream<T> limit(long maxSize) {
-            return new ParallelSupplierStream<>(super.limit(maxSize));
-        }
-
-        @Override
-        public <R> ParallelSupplierStream<R> map(Function<T, R> mapper) {
-            return new ParallelSupplierStream<>(super.map(mapper));
-        }
-    }
-
 
 }

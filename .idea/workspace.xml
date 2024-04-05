@@ -5,6 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c5140695-482c-4a6b-8e4c-f87cf5e70171" name="Changes" comment="">
+<<<<<<< HEAD
       <change afterPath="$PROJECT_DIR$/src/main/java/org/example/IndexStreamParallel.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/4/9/499269051de99dafc66deeb684e77d10be999af8" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/sonarlint/issuestore/4/9/499269051de99dafc66deeb684e77d10be999af8" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/index.pb" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/sonarlint/issuestore/index.pb" afterDir="false" />
@@ -13,6 +14,13 @@
       <change beforePath="$PROJECT_DIR$/src/main/java/org/example/IndexStream.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/IndexStream.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/test/java/SupplierStreamTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/SupplierStreamTest.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/test-classes/SupplierStreamTest$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/test-classes/SupplierStreamTest$1.class" afterDir="false" />
+=======
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/ParallelSupplierStream.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.settings/org.eclipse.core.resources.prefs" beforeDir="false" afterPath="$PROJECT_DIR$/.settings/org.eclipse.core.resources.prefs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/SupplierStream.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/SupplierStream.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/example/SupplierStream.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/example/SupplierStream.class" afterDir="false" />
+>>>>>>> f34dcb1 (parallelized)
       <change beforePath="$PROJECT_DIR$/target/test-classes/SupplierStreamTest.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/test-classes/SupplierStreamTest.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -46,12 +54,16 @@
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "dart.analysis.tool.window.visible": "false",
-    "git-widget-placeholder": "main",
+    "git-widget-placeholder": "Rebasing main",
     "last_opened_file_path": "/home/dbana/school/TPNOTE/Streams",
     "node.js.selected.package.tslint": "(autodetect)"
   }
 }]]></component>
+<<<<<<< HEAD
   <component name="RunManager" selected="JUnit.SupplierStreamTest.testFindAny">
+=======
+  <component name="RunManager" selected="JUnit.SupplierStreamTest">
+>>>>>>> f34dcb1 (parallelized)
     <configuration name="SupplierStreamTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="Streams" />
       <option name="PACKAGE_NAME" value="" />
@@ -83,9 +95,13 @@
     </configuration>
     <recent_temporary>
       <list>
+<<<<<<< HEAD
         <item itemvalue="JUnit.SupplierStreamTest.testFindAny" />
         <item itemvalue="JUnit.SupplierStreamTest.testIterate" />
+=======
+>>>>>>> f34dcb1 (parallelized)
         <item itemvalue="JUnit.SupplierStreamTest" />
+        <item itemvalue="JUnit.SupplierStreamTest.testIterate" />
       </list>
     </recent_temporary>
   </component>
@@ -99,5 +115,8 @@
       <updated>1712302358406</updated>
     </task>
     <servers />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <option name="LAST_COMMIT_MESSAGE" value="" />
   </component>
 </project>
