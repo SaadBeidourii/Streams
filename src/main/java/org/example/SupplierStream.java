@@ -1,6 +1,7 @@
 package org.example;
 
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -38,9 +39,15 @@ public class SupplierStream<T> implements BasicStream<T>{
 
     @Override
     public Optional<T> reduce(BinaryOperator<T> accumulator) {
-        return supplier.get().map((x) -> 
+        return supplier.get().map((x) ->
             reduce(accumulator).map((a) -> accumulator.apply(x, a)).orElse(x));
     }
+
+
+    public static <T> SupplierStream<T> concat(SupplierStream<T> s1, SupplierStream<T> s2) {
+        return new SupplierStream<>(() -> s1.supplier.get().or(s2.supplier));
+    }
+
 
 
 }

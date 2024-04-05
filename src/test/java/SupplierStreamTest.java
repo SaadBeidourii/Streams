@@ -88,4 +88,13 @@ public class SupplierStreamTest {
         mapped = stream.map(x -> 1);
         assertFalse(mapped.reduce(Integer::sum).isPresent());
     }
+
+    @Test
+    public void testConcat() {
+        SupplierStream<Integer> stream1 = new SupplierStream<>(generator(3));
+        SupplierStream<Integer> stream2 = new SupplierStream<>(generator(3));
+        BasicStream<Integer> concat2 = SupplierStream.concat(stream1, stream2);
+
+        assertEquals(6, concat2.reduce(Integer::sum).orElse(-1).intValue());
+    }
 }

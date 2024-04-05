@@ -1,0 +1,188 @@
+Index: src/test/java/SupplierStreamTest.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>import org.example.BasicStream;\nimport org.example.SupplierStream;\nimport org.junit.jupiter.api.Test;\n\nimport java.util.ArrayList;\nimport java.util.List;\nimport java.util.Optional;\nimport java.util.function.Predicate;\nimport java.util.function.Supplier;\n\nimport static org.junit.jupiter.api.Assertions.*;\n\npublic class SupplierStreamTest {\n\n    static Supplier<Optional<Integer>> generator(int n) {\n        return new Supplier<>() {\n            int i = 0;\n            @Override\n            public Optional<Integer> get() {\n                return (i < n) ? Optional.of(i++) : Optional.empty();\n            }\n        };\n    }\n\n    List<Integer> lacc;\n\n    @Test\n    public void testForEach() {\n        SupplierStream<Integer> stream = new SupplierStream<>(generator(6));\n        lacc = new ArrayList<>();\n        stream.forEach(x -> lacc.add(x));\n        List<Integer> excepted = List.of(0, 1, 2, 3, 4, 5);\n        assertEquals(excepted, lacc);\n\n        stream = new SupplierStream<>(Optional::empty);\n        lacc = new ArrayList<>();\n        stream.forEach(x -> lacc.add(x));\n        assertTrue(lacc.isEmpty());\n    }\n\n    @Test\n    public void testReduce() {\n        SupplierStream<Integer> stream = new SupplierStream<>(generator(6));\n        assertEquals(15, stream.reduce(Integer::sum).orElse(-1).intValue());\n\n        stream = new SupplierStream<>(Optional::empty);\n        assertFalse(stream.reduce(Integer::sum).isPresent());\n    }\n\n    @Test\n    public void testFilter() {\n        SupplierStream<Integer> stream = new SupplierStream<>(generator(7));\n        Predicate<Integer> p = x -> x > 10;\n        BasicStream<Integer> filtered = stream.filter(p);\n        assertFalse(filtered.reduce(Integer::sum).isPresent());\n\n        stream = new SupplierStream<>(generator(7));\n        p = x -> x % 2 == 0;\n        filtered = stream.filter(p);\n        assertEquals(12, filtered.reduce(Integer::sum).orElse(-1).intValue());\n    }\n\n    @Test\n    public void testLimit() {\n        assertEquals(6, new SupplierStream<>(generator(7)).\n                limit(4).reduce(Integer::sum).orElse(-1).intValue());\n        assertEquals(6, new SupplierStream<>(generator(4)).\n                limit(10).reduce(Integer::sum).orElse(-1).intValue());\n        assertEquals(45, new SupplierStream<>(generator(Integer.MAX_VALUE)).\n                limit(10).reduce(Integer::sum).orElse(-1).intValue());\n        assertEquals(-1, new SupplierStream<>(generator(42)).\n                limit(0).reduce(Integer::sum).orElse(-1).intValue());\n        assertEquals(-1, new SupplierStream<Integer>(Optional::empty).\n                limit(4).reduce(Integer::sum).orElse(-1).intValue());\n    }\n\n    @Test\n    public void testMap() {\n        SupplierStream<Integer> stream = new SupplierStream<>(generator(10));\n        BasicStream<Integer> mapped = stream.map(x -> x * 10);\n        assertEquals(450, mapped.reduce(Integer::sum).orElse(-1).intValue());\n\n        stream = new SupplierStream<>(generator(7));\n        mapped = stream.map(x -> 1);\n        assertEquals(7, mapped.reduce(Integer::sum).orElse(-1).intValue());\n\n        stream = new SupplierStream<>(Optional::empty);\n        mapped = stream.map(x -> 1);\n        assertFalse(mapped.reduce(Integer::sum).isPresent());\n    }\n}\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/test/java/SupplierStreamTest.java b/src/test/java/SupplierStreamTest.java
+--- a/src/test/java/SupplierStreamTest.java	(revision 7733fa76d12308ea5236b6d3ebf23bdffbcdf009)
++++ b/src/test/java/SupplierStreamTest.java	(date 1712304150694)
+@@ -88,4 +88,13 @@
+         mapped = stream.map(x -> 1);
+         assertFalse(mapped.reduce(Integer::sum).isPresent());
+     }
++
++    @Test
++    public void testConcat() {
++        SupplierStream<Integer> stream1 = new SupplierStream<>(generator(3));
++        SupplierStream<Integer> stream2 = new SupplierStream<>(generator(3));
++        BasicStream<Integer> concat2 = SupplierStream.concat(stream1, stream2);
++
++        assertEquals(6, concat2.reduce(Integer::sum).orElse(-1).intValue());
++    }
+ }
+Index: src/main/java/org/example/SupplierStream.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package org.example;\n\nimport java.util.Optional;\nimport java.util.function.*;\nimport java.util.concurrent.atomic.AtomicInteger;\n\npublic class SupplierStream<T> implements BasicStream<T>{\n    final Supplier<Optional<T>> supplier;\n\n    public SupplierStream(Supplier<Optional<T>> supplier) {\n        this.supplier = supplier;\n    }\n\n    @Override\n    public BasicStream<T> filter(Predicate<T> predicate) {\n        return new SupplierStream<>(() -> getNext(predicate));\n    }\n    public Optional<T> getNext(Predicate<T> predicate){\n        Optional<T> o = supplier.get();\n        return o.flatMap((x)->predicate.test(x)?Optional.of(x):getNext(predicate));\n    }\n    @Override\n    public BasicStream<T> limit(long maxSize) {\n        AtomicInteger c = new AtomicInteger(0);\n        return new SupplierStream<T>(() ->\n                supplier.get().filter(x -> c.getAndIncrement() < maxSize));\n    }\n\n    @Override\n    public <R> BasicStream<R> map(Function<T, R> mapper) {\n        return new SupplierStream<>(() -> supplier.get().map(mapper));\n    }\n\n    @Override\n    public void forEach(Consumer<T> action) {\n        supplier.get().ifPresent((x) -> { action.accept(x); forEach(action); });\n    }\n\n    @Override\n    public Optional<T> reduce(BinaryOperator<T> accumulator) {\n        return supplier.get().map((x) -> \n            reduce(accumulator).map((a) -> accumulator.apply(x, a)).orElse(x));\n    }\n\n\n}\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/org/example/SupplierStream.java b/src/main/java/org/example/SupplierStream.java
+--- a/src/main/java/org/example/SupplierStream.java	(revision 7733fa76d12308ea5236b6d3ebf23bdffbcdf009)
++++ b/src/main/java/org/example/SupplierStream.java	(date 1712304112723)
+@@ -1,6 +1,7 @@
+ package org.example;
+ 
+ import java.util.Optional;
++import java.util.concurrent.atomic.AtomicReference;
+ import java.util.function.*;
+ import java.util.concurrent.atomic.AtomicInteger;
+ 
+@@ -43,4 +44,10 @@
+     }
+ 
+ 
++    public static <T> SupplierStream<T> concat(SupplierStream<T> s1, SupplierStream<T> s2) {
++        return new SupplierStream<>(() -> s1.supplier.get().or(s2.supplier));
++    }
++
++
++
+ }
+Index: .idea/workspace.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<project version=\"4\">\n  <component name=\"AutoImportSettings\">\n    <option name=\"autoReloadType\" value=\"SELECTIVE\" />\n  </component>\n  <component name=\"ChangeListManager\">\n    <list default=\"true\" id=\"c5140695-482c-4a6b-8e4c-f87cf5e70171\" name=\"Changes\" comment=\"\">\n      <change beforePath=\"$PROJECT_DIR$/src/main/java/org/example/SupplierStream.java\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/src/main/java/org/example/SupplierStream.java\" afterDir=\"false\" />\n    </list>\n    <option name=\"SHOW_DIALOG\" value=\"false\" />\n    <option name=\"HIGHLIGHT_CONFLICTS\" value=\"true\" />\n    <option name=\"HIGHLIGHT_NON_ACTIVE_CHANGELIST\" value=\"false\" />\n    <option name=\"LAST_RESOLUTION\" value=\"IGNORE\" />\n  </component>\n  <component name=\"Git.Settings\">\n    <option name=\"RECENT_GIT_ROOT_PATH\" value=\"$PROJECT_DIR$\" />\n  </component>\n  <component name=\"ProjectColorInfo\">{\n  &quot;associatedIndex&quot;: 0\n}</component>\n  <component name=\"ProjectId\" id=\"2efj7EYl1n3gwYhVs6WdJWSBNk9\" />\n  <component name=\"ProjectViewState\">\n    <option name=\"hideEmptyMiddlePackages\" value=\"true\" />\n    <option name=\"showLibraryContents\" value=\"true\" />\n  </component>\n  <component name=\"PropertiesComponent\">{\n  &quot;keyToString&quot;: {\n    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,\n    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,\n    &quot;git-widget-placeholder&quot;: &quot;main&quot;,\n    &quot;last_opened_file_path&quot;: &quot;/home/dbana/school/TPNOTE/Streams&quot;\n  }\n}</component>\n  <component name=\"RunManager\">\n    <configuration default=\"true\" type=\"JetRunConfigurationType\">\n      <module name=\"Streams\" />\n      <method v=\"2\">\n        <option name=\"Make\" enabled=\"true\" />\n      </method>\n    </configuration>\n    <configuration default=\"true\" type=\"KotlinStandaloneScriptRunConfigurationType\">\n      <module name=\"Streams\" />\n      <option name=\"filePath\" />\n      <method v=\"2\">\n        <option name=\"Make\" enabled=\"true\" />\n      </method>\n    </configuration>\n  </component>\n  <component name=\"SpellCheckerSettings\" RuntimeDictionaries=\"0\" Folders=\"0\" CustomDictionaries=\"0\" DefaultDictionary=\"application-level\" UseSingleDictionary=\"true\" transferred=\"true\" />\n  <component name=\"TaskManager\">\n    <task active=\"true\" id=\"Default\" summary=\"Default task\">\n      <changelist id=\"c5140695-482c-4a6b-8e4c-f87cf5e70171\" name=\"Changes\" comment=\"\" />\n      <created>1712302358406</created>\n      <option name=\"number\" value=\"Default\" />\n      <option name=\"presentableId\" value=\"Default\" />\n      <updated>1712302358406</updated>\n    </task>\n    <servers />\n  </component>\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/workspace.xml b/.idea/workspace.xml
+--- a/.idea/workspace.xml	(revision 7733fa76d12308ea5236b6d3ebf23bdffbcdf009)
++++ b/.idea/workspace.xml	(date 1712304112815)
+@@ -5,7 +5,11 @@
+   </component>
+   <component name="ChangeListManager">
+     <list default="true" id="c5140695-482c-4a6b-8e4c-f87cf5e70171" name="Changes" comment="">
++      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+       <change beforePath="$PROJECT_DIR$/src/main/java/org/example/SupplierStream.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/SupplierStream.java" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/src/test/java/SupplierStreamTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/SupplierStreamTest.java" afterDir="false" />
+     </list>
+     <option name="SHOW_DIALOG" value="false" />
+     <option name="HIGHLIGHT_CONFLICTS" value="true" />
+@@ -23,28 +27,51 @@
+     <option name="hideEmptyMiddlePackages" value="true" />
+     <option name="showLibraryContents" value="true" />
+   </component>
+-  <component name="PropertiesComponent">{
+-  &quot;keyToString&quot;: {
+-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+-    &quot;last_opened_file_path&quot;: &quot;/home/dbana/school/TPNOTE/Streams&quot;
++  <component name="PropertiesComponent"><![CDATA[{
++  "keyToString": {
++    "JUnit.SupplierStreamTest.executor": "Run",
++    "JUnit.SupplierStreamTest.testConcat.executor": "Run",
++    "RunOnceActivity.OpenProjectViewOnStart": "true",
++    "RunOnceActivity.ShowReadmeOnStart": "true",
++    "dart.analysis.tool.window.visible": "false",
++    "git-widget-placeholder": "main",
++    "kotlin-language-version-configured": "true",
++    "last_opened_file_path": "/Users/saadbeidouri/Documents/SI4/S8/ProgFonc/Streams",
++    "node.js.detected.package.eslint": "true",
++    "node.js.detected.package.tslint": "true",
++    "node.js.selected.package.eslint": "(autodetect)",
++    "node.js.selected.package.tslint": "(autodetect)",
++    "nodejs_package_manager_path": "npm",
++    "show.migrate.to.gradle.popup": "false",
++    "vue.rearranger.settings.migration": "true"
+   }
+-}</component>
+-  <component name="RunManager">
+-    <configuration default="true" type="JetRunConfigurationType">
++}]]></component>
++  <component name="RunManager" selected="JUnit.SupplierStreamTest.testConcat">
++    <configuration name="SupplierStreamTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+       <module name="Streams" />
++      <option name="PACKAGE_NAME" value="" />
++      <option name="MAIN_CLASS_NAME" value="SupplierStreamTest" />
++      <option name="TEST_OBJECT" value="class" />
+       <method v="2">
+         <option name="Make" enabled="true" />
+       </method>
+     </configuration>
+-    <configuration default="true" type="KotlinStandaloneScriptRunConfigurationType">
++    <configuration name="SupplierStreamTest.testConcat" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+       <module name="Streams" />
+-      <option name="filePath" />
++      <option name="PACKAGE_NAME" value="" />
++      <option name="MAIN_CLASS_NAME" value="SupplierStreamTest" />
++      <option name="METHOD_NAME" value="testConcat" />
++      <option name="TEST_OBJECT" value="method" />
+       <method v="2">
+         <option name="Make" enabled="true" />
+       </method>
+     </configuration>
++    <recent_temporary>
++      <list>
++        <item itemvalue="JUnit.SupplierStreamTest.testConcat" />
++        <item itemvalue="JUnit.SupplierStreamTest" />
++      </list>
++    </recent_temporary>
+   </component>
+   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+   <component name="TaskManager">
+@@ -54,7 +81,11 @@
+       <option name="number" value="Default" />
+       <option name="presentableId" value="Default" />
+       <updated>1712302358406</updated>
++      <workItem from="1712303568509" duration="544000" />
+     </task>
+     <servers />
+   </component>
++  <component name="TypeScriptGeneratedFilesManager">
++    <option name="version" value="3" />
++  </component>
+ </project>
+\ No newline at end of file
+Index: .idea/compiler.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<project version=\"4\">\n  <component name=\"CompilerConfiguration\">\n    <annotationProcessing>\n      <profile name=\"Maven default annotation processors profile\" enabled=\"true\">\n        <sourceOutputDir name=\"target/generated-sources/annotations\" />\n        <sourceTestOutputDir name=\"target/generated-test-sources/test-annotations\" />\n        <outputRelativeToContentRoot value=\"true\" />\n      </profile>\n    </annotationProcessing>\n  </component>\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/compiler.xml b/.idea/compiler.xml
+--- a/.idea/compiler.xml	(revision 7733fa76d12308ea5236b6d3ebf23bdffbcdf009)
++++ b/.idea/compiler.xml	(date 1712303626815)
+@@ -6,6 +6,7 @@
+         <sourceOutputDir name="target/generated-sources/annotations" />
+         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+         <outputRelativeToContentRoot value="true" />
++        <module name="Streams" />
+       </profile>
+     </annotationProcessing>
+   </component>
+Index: .idea/vcs.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<project version=\"4\">\n  <component name=\"VcsDirectoryMappings\">\n    <mapping directory=\"$PROJECT_DIR$\" vcs=\"Git\" />\n  </component>\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/vcs.xml b/.idea/vcs.xml
+--- a/.idea/vcs.xml	(revision 7733fa76d12308ea5236b6d3ebf23bdffbcdf009)
++++ b/.idea/vcs.xml	(date 1712303626822)
+@@ -1,6 +1,6 @@
+ <?xml version="1.0" encoding="UTF-8"?>
+ <project version="4">
+   <component name="VcsDirectoryMappings">
+-    <mapping directory="$PROJECT_DIR$" vcs="Git" />
++    <mapping directory="" vcs="Git" />
+   </component>
+ </project>
+\ No newline at end of file
