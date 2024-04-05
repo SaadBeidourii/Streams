@@ -1,16 +1,17 @@
 package org.example;
 
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.*;
 
 public class IndexStream<T> implements BasicStream<T> {
 
-    private final int min;
-    private final int max;
-    private final Function<Integer, Optional<T>> valueSupplier;
+    protected final int min;
+    protected final int max;
+    protected final Function<Integer, Optional<T>> valueSupplier;
 
-    public IndexStream(Function<Integer,Optional<T>> f,int min, int max) {
-        this.valueSupplier = f;
+    public IndexStream(Function<Integer,Optional<T>> valueSupplier, int min, int max) {
+        this.valueSupplier = valueSupplier;
         this.min = min;
         this.max = max;
     }
@@ -63,7 +64,7 @@ public class IndexStream<T> implements BasicStream<T> {
     public T findAny(Predicate<T> predicate) {
         AtomicInteger i = new AtomicInteger(min);
         while (i.get() < max) {
-            Optional<T> o = f.apply(i.get());
+            Optional<T> o = valueSupplier.apply(i.get());
             if (o.isPresent()) {
                 T x = o.get();
                 if (predicate.test(x)) {
